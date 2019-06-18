@@ -12,7 +12,6 @@ WORKDIR /tmp/sqs-alpine
 RUN \
   apk add --update git \
   && rm -rf /var/cache/apk/* \
-  && git clone --verbose --depth=1 https://github.com/kobim/sqs-insight.git \
   && curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-${jq_version}/jq-linux64 \
   && chmod +x /usr/local/bin/jq \
   && export elasticmq_version=$(curl -sL https://api.github.com/repos/adamw/elasticmq/releases/latest | jq -r .tag_name) \
@@ -21,7 +20,7 @@ RUN \
   && mv elasticmq-server-${elasticmq_version}.jar elasticmq-server.jar
 
 FROM anapsix/alpine-java:8
-LABEL maintainer="Ronald E. Oribio R. https://github.com/roribio"
+LABEL maintainer="Ralph Gregor Aquino https://github.com/rgaquino"
 
 COPY --from=Builder /tmp/sqs-alpine/ /opt/
 COPY etc/ /etc/
@@ -35,11 +34,9 @@ RUN \
   && rm -rf \
     /var/cache/apk/* \
     /etc/supervisord.conf \
-  && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf \
-  && cd /opt/sqs-insight \
-  && npm install
+  && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf
 
-EXPOSE 9324 9325 
+EXPOSE 9324
 
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
 
