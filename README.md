@@ -1,45 +1,6 @@
 # Alpine SQS _(alpine-sqs)_
 
-![banner](https://raw.githubusercontent.com/roribio/alpine-sqs/master/banner.png)
-
-[![](https://images.microbadger.com/badges/image/roribio16/alpine-sqs.svg)](https://microbadger.com/images/roribio16/alpine-sqs "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/roribio16/alpine-sqs.svg)](https://microbadger.com/images/roribio16/alpine-sqs "Get your own version badge on microbadger.com") [![Docker Pulls](https://img.shields.io/docker/stars/roribio16/alpine-sqs.svg)](https://hub.docker.com/r/roribio16/alpine-sqs/) [![Docker Pulls](https://img.shields.io/docker/pulls/roribio16/alpine-sqs.svg)](https://hub.docker.com/r/roribio16/alpine-sqs/) [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
-> Dockerized ElasticMQ server + web UI over Alpine Linux for local development.
-
-Alpine SQS provides a containerized Java implementation of the Amazon Simple Queue Service (AWS-SQS). It is based on ElasticMQ running Alpine Linux and the Oracle Java 8 Server-JRE. It is compatible with AWS's API, CLI as well as the Amazon Java SDK. This allows for quicker local development without having to incurr in infrastructure costs.
-
-The goal of this repository is to maintain an updated Docker environment for ElasticMQ with an integrated web UI for visualizing queues and messages.
-
-## Table of Contents
-
-- [Background](#background)
-- [Install](#install)
-- [Usage](#usage)
-- [Maintainer](#maintainer)
-- [Contribute](#contribute)
-- [License](#license)
-
-## Background
-When searching for existing local implementations of SQS I came across a Docker image by [@vsouza](https://github.com/vsouza) called [docker-SQS-local](https://github.com/vsouza/docker-SQS-local) with over 11K pulls at the time.
-
-This introduced me to ElasticMQ, which this project is based on and is described by it's creators as:
-
-> a  message queue system, offering an actor-based Scala and an SQS-compatible REST (query) interface.
-
-Using his work as inspiration I decided to improve upon it by implementing the following:
-
-- Reduce the Docker image foot-print as much as possible.
-- Automatically update to the latest ElasticMQ server.
-- Integrated UI for message-queue visualization.
-- Automatic tests & builds (work in progress).
-- Thorough documentation.
-
-### See also
-For more information on the different projects this work is based on, please visit:
-
-- [ElasticMQ](https://github.com/adamw/elasticmq) by [@adamw](https://github.com/adamw).
-- [sqs-insight](https://github.com/finanzcheck/sqs-insight) by [finanzcheck](https://github.com/finanzcheck).
-- [docker-alpine-java](https://github.com/anapsix/docker-alpine-java) by [anapsix](https://github.com/anapsix).
+The is a fork of https://github.com/roribio/alpine-sqs removing the bundled UI that uses up to > 99% CPU usage.
 
 ## Install
 ### Pre-requisites
@@ -52,11 +13,11 @@ If you intend to build the environment yourself, it is recommended that you also
 You can obtain the environment in two ways; The easiest is to pull the image directly from Docker Hub. Also, you may clone this repository and build/run it using Docker Compose.
 #### 1. Pulling from Docker Hub
 ```
-docker pull roribio16/alpine-sqs
+docker pull rgaquino/alpine-sqs
 ```
 #### 2. Building from scratch
 ```
-git clone https://github.com/roribio/alpine-sqs.git
+git clone https://github.com/rgaquino/alpine-sqs.git
 ```
 ## Usage
 ### Running the environment
@@ -66,7 +27,7 @@ Depending on how you chose to install the environment, you can initialize it in 
 Use this method if you're pulling directly from Docker Hub and do not have a `docker-compose.yml` file.
 
 ```
-docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -d roribio16/alpine-sqs:latest
+docker run --name alpine-sqs -p 9324:9324 -d rgaquino/alpine-sqs:latest
 ```
 
 Custom configuration files may be used to override default behaviors. You can mount a volume mapping the container's `/opt/custom` directory to a folder in your host machine where the custom configuration files are stored.
@@ -74,10 +35,10 @@ Custom configuration files may be used to override default behaviors. You can mo
 Providing for sake of example that in your host machine directory `/opt/alpine-sqs` you have both `elasticmq.conf` and `sqs-insight.conf` files, you can run the container with:
 
 ```
-docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -v /opt/alpine-sqs:/opt/custom -d roribio16/alpine-sqs:latest
+docker run --name alpine-sqs -p 9324:9324 -v /opt/alpine-sqs:/opt/custom -d rgaquino/alpine-sqs:latest
 ```
 
-For any configuration file not explicitly included in the container's `/opt/custom` directory, `alpine-sqs` will fall back to using the default configuration files listed [here](https://github.com/roribio/alpine-sqs/tree/master/opt).
+For any configuration file not explicitly included in the container's `/opt/custom` directory, `alpine-sqs` will fall back to using the default configuration files listed [here](https://github.com/rgaqui/alpine-sqs/tree/master/opt).
 
 #### 2. `docker-compose up` method
 If you've cloned the repository you can still take advantage of the image present in Docker Hub by running the container from the default `docker-compose.yml` file. This will pull the pre-built image from the public registry and run it with the same values stated in the previous method.
@@ -113,7 +74,6 @@ aws --endpoint-url http://localhost:9324 sqs send-message --queue-url http://loc
 ```
 
 #### Viewing messages
-To view messages, navigate to the web UI ([sqs-insight](https://github.com/finanzcheck/sqs-insight)) by pointing your web browser to `http://localhost:9325`.
 
 You can also poll for messages from the command-line like so:
 
@@ -182,17 +142,6 @@ All the fields, except the `url` field, are required by `sqs-insight` to functio
 
 > Consult the [AWS CLI Command Reference](http://docs.aws.amazon.com/cli/latest/reference/sqs/index.html#cli-aws-sqs) or the [AWS SDK for Java](http://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-message-queues.html) guide for more examples and information.
 
-## Maintainer
-Ronald E. Oribio R. - [@roribio](https://github.com/roribio).
-
-## Contribute
-PRs are accepted and encouraged!
-
-Please direct any questions, requests, or comments to the [Issues](https://github.com/roribio/alpine-sqs/issues) section of this project. 
-
-**Note:** If editing this Readme, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
-
 ## License
-Copyright 2017 Ronald E. Oribio R.
 
 This project is licensed under the GNU General Public License, version 3.0. See the [LICENSE](./LICENSE) file for details.
