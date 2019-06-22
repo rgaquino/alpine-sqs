@@ -115,31 +115,6 @@ After editing the `elasticmq.conf` file, you need to restart the ElasticMQ serve
 docker exec -it alpine-sqs sh -c "supervisorctl restart elasticmq"
 ``` 
 
-#### Registering new queues with the UI
-To be able to visualize newly created queues, you need to edit the `sqs-insight.conf` file to register the new queue with the UI server. Edits to this file are automatically detected by the server and does not require a restart.
-
-Configure a new endpoint like this:
-
-```
-"endpoints": [
-        {
-           "key": "notValidKey",
-           "secretKey": "notValidSecret",
-           "region": "eu-central-1",
-           "url": "http://localhost:9324/queue/default"
-        },
-        {
-           "key": "notValidKey",
-           "secretKey": "notValidSecret",
-           "region": "eu-central-1",
-           "url": "http://localhost:9324/queue/newqueue"
-        }
-    ]
-
-```
-
-All the fields, except the `url` field, are required by `sqs-insight` to function but are not used when pointing it to a local queue server. This means that the values in those fields are not relevant for the UI to work correctly.
-
 > Consult the [AWS CLI Command Reference](http://docs.aws.amazon.com/cli/latest/reference/sqs/index.html#cli-aws-sqs) or the [AWS SDK for Java](http://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-message-queues.html) guide for more examples and information.
 
 ## License
