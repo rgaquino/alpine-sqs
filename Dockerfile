@@ -1,7 +1,7 @@
-# Copyright 2017 Ronald E. Oribio R.
+# Copyright 2019 Ralph Gregor Aquino
 #
 # This file is part of alpine-sqs which is released under the GPLv3.
-# See https://github.com/roribio/alpine-sqs for details.
+# See https://github.com/rgaquino/alpine-sqs for details.
 
 FROM appropriate/curl as Builder
 
@@ -10,9 +10,7 @@ ARG jq_version=1.5
 WORKDIR /tmp/sqs-alpine
 
 RUN \
-  apk add --update git \
-  && rm -rf /var/cache/apk/* \
-  && curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-${jq_version}/jq-linux64 \
+  curl -L -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-${jq_version}/jq-linux64 \
   && chmod +x /usr/local/bin/jq \
   && export elasticmq_version=$(curl -sL https://api.github.com/repos/adamw/elasticmq/releases/latest | jq -r .tag_name) \
   && elasticmq_version=${elasticmq_version//v} \
@@ -28,8 +26,6 @@ COPY opt/ /opt/
 
 RUN \
   apk add --update \
-    nodejs \
-    nodejs-npm \
     supervisor \
   && rm -rf \
     /var/cache/apk/* \

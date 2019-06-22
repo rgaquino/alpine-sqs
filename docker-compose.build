@@ -6,7 +6,7 @@ services:
       context: .
 #      args:
 #        - jq_version=${jq_version}
-    image: alpine-sqs:dev
+    image: alpine-sqs
     container_name: alpine-sqs
     ports:
       - "9324:9324"
