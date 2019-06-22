@@ -1,6 +1,6 @@
 # Alpine SQS _(alpine-sqs)_
 
-The is a fork of https://github.com/roribio/alpine-sqs removing the bundled UI that uses up to > 99% CPU.
+This a fork of https://github.com/roribio/alpine-sqs removing the bundled UI that uses up to > 99% CPU.
 
 ## Install
 ### Pre-requisites
